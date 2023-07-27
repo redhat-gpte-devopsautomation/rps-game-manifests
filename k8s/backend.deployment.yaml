@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: roshambo-backend
-          image: quay.io/rhdevelopers/roshambo-backend:camera
+          image: quay.io/rhdevelopers/roshambo-backend:buttons
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
