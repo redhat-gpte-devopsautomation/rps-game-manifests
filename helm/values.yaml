@@ -10,8 +10,8 @@ backend:
       memory: "256Mi"
       cpu: "250m"
     limits:
-      memory: "1Gi"
-      cpu: "1"
+      memory: "4Gi"
+      cpu: "2"
 
 frontend:
   image: quay.io/rhdevelopers/roshambo-frontend:latest
