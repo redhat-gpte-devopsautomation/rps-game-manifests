@@ -1,5 +1,24 @@
 # Roshambo Game k8s Manifests
 
+## RedHat OpenShift DataScience
+
+To run the example you need to have the RedHat OpenShift DataScience operator installed.
+
+<div align="center">
+<img width="85%" src="screenshots/00-datascience.png" alt="OpenShift Data Science Installed" title="OpenShift DataScience Installed"</img>
+</div>
+
+Wait 3 or 4 minutes after the operator is ready, to give time to register all controllers and CRDs.
+
+Then you'll need to login into the OpenShift cluster from a terminal and run the following command to install the AI model:
+
+```bash
+cd ai
+make
+```
+
+After this, the model is installed, the AI service is running in the `rps-ai-service` namespace, and you can continue on the installation process of the game.
+
 ## Deployment on OpenShift
 
 You can deploy the game using regular CLI commands, or using GitOps.
