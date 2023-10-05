@@ -1,25 +1,36 @@
 # Roshambo Game k8s Manifests
 
-## RedHat OpenShift DataScience
+The game is composed of two separate components; the image recognition service
+provided by OpenShift AI (OpenShift DataScience), and the game components. 
+These are deployed into separate Projects on the OpenShift cluster.
 
-To run the example you need to have the RedHat OpenShift DataScience operator installed.
+_NOTE: A user with the `cluster-admin` role assigned to them is required to
+deploy the game. You also need the `oc` CLI installed on your machine._
+
+## Deploy the DataScience Project
+
+Being by installing the Red Hat OpenShift DataScience operator via OperatorHub
+in the OpenShift Web Console:
 
 <div align="center">
 <img width="85%" src="screenshots/00-datascience.png" alt="OpenShift Data Science Installed" title="OpenShift DataScience Installed"</img>
 </div>
 
-Wait 3 or 4 minutes after the operator is ready, to give time to register all controllers and CRDs.
+Wait 3 or 4 minutes until the operator is ready, to give time to register all controllers and CRDs.
 
 Then you'll need to login into the OpenShift cluster from a terminal and run the following command to install the AI model:
 
 ```bash
+# Login as a valid OpenShift user with cluster-admin permissions
+oc login
+
 cd ai
 make
 ```
 
-After this, the model is installed, the AI service is running in the `rps-ai-service` namespace, and you can continue on the installation process of the game.
+After this, the model is installed, the AI service is running in the `rps-ai-service` namespace, and you can continue with the installation process of the game.
 
-## Deployment on OpenShift
+## Deploy the Game Project
 
 You can deploy the game using regular CLI commands, or using GitOps.
 
@@ -33,11 +44,11 @@ export NAMESPACE="rps-game"
 # Create the namespace for the application
 oc new-project $NAMESPACE
 
-# Generate and apply YAML manifests
+# Generate and apply YAML manifests or use helm install
 helm template helm/ --namespace $NAMESPACE | oc apply -f -
 ```
 
-### Using Argo CD (OpenShift GitOps)
+### Using OpenShift GitOps (Argo CD)
 
 This requires an OpenShift cluster that you have access to a user with `cluster-admin` access.
 
@@ -68,14 +79,18 @@ Once the Operator is ready you can find the link to Argo CD (provided and manage
     metadata:
       name: rps-game
     spec:
-      project: default
-      source:
-        repoURL: 'https://github.com/redhat-developer-demos/rps-game'
-        path: helm
-        targetRevision: k8s-resources
       destination:
-        server: 'https://kubernetes.default.svc'
+        name: ''
         namespace: rps-game
+        server: 'https://kubernetes.default.svc'
+      source:
+        path: helm
+        repoURL: 'https://github.com/redhat-developer-demos/rps-game-manifests'
+        targetRevision: HEAD
+        helm:
+          valueFiles:
+            - values.yaml
+      project: default
       syncPolicy:
         automated:
           prune: true
