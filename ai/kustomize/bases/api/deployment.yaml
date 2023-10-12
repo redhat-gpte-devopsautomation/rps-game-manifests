@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: ai-service
-        image: quay.io/rhdevelopers/roshambo-ai:1.0.0 
+        image: quay.io/rhdevelopers/roshambo-ai:latest
         ports:
           - containerPort: 8080
         envFrom:
