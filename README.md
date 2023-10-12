@@ -100,5 +100,8 @@ Once the Operator is ready you can find the link to Argo CD (provided and manage
     ```
 1. Click **Save**, then click **Create**.
     ![Argo CD Application](screenshots/03-argo-app.png)
-
+1. Label the newly created namesapce to provide GitOps with admin rights to manage it and deploy resources within it:
+    ```bash
+    oc label namespace rps-game argocd.argoproj.io/managed-by=openshift-gitops
+    ```
 **NOTE:** use the *values.production.yaml* file if you need to allocate more resources for a large audience!
