@@ -30,11 +30,11 @@ jobs:
     - name: Update values.yaml
       uses: mikefarah/yq@v4.35.2
       with:
-        cmd: yq -i e ".backend.image = \"${{github.event.inputs.image}}\"" helm/values.yaml
+        cmd: 'yq -i e ".backend.image = \"${{github.event.inputs.image}}\"" helm/values.yaml'
     - name: Update values.production.yaml
       uses: mikefarah/yq@v4.35.2
       with:
-        cmd: yq -i e ".backend.image = \"${{github.event.inputs.image}}\"" helm/values.production.yaml
+        cmd: 'yq -i e ".backend.image = \"${{github.event.inputs.image}}\"" helm/values.production.yaml'
 
     # Create a PR with the new values files. This requires actions to
     # be allowed to open a PR:
