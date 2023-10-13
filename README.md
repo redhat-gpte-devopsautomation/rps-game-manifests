@@ -9,7 +9,7 @@ deploy the game. You also need the `oc` CLI installed on your machine._
 
 ## Deploy the DataScience Project
 
-Being by installing the Red Hat OpenShift DataScience operator via OperatorHub
+Begin by installing the Red Hat OpenShift DataScience operator via OperatorHub
 in the OpenShift Web Console:
 
 <div align="center">
