@@ -1,5 +1,12 @@
 name: Update Backend Image
 
+# This workflow is triggered by the backend build in the redhat-developer-demos/rps-game-manifests repo.
+# To manually trigger the action, you can use curl with a PAT:
+# curl -X POST \
+# -H "Authorization: Bearer $PAT" \
+# -H "Accept: application/vnd.github.v3+json" \
+# https://api.github.com/repos/redhat-developer-demos/rps-game-manifests/actions/workflows/update-backend-image.yaml/dispatches \
+# -d '{"ref":"main", "inputs": { "image": "foo" } }'
 on:
   workflow_dispatch:
     inputs:
@@ -12,23 +19,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # Checkout the source code in the repository
     - uses: actions/checkout@v3
 
     - name: Print new image value
       id: fooo
       run: echo "New image is ${{github.event.inputs.image}}"
 
+    # Update both values files (production and non-production resources)
     - name: Update values.yaml
       uses: mikefarah/yq@v4.35.2
       with:
-        cmd: yq e ".backend.image = \"${{github.event.inputs.image}}\"" helm/values.yaml  > helm/values.yaml
-
+        cmd: yq -i e ".backend.image = \"${{github.event.inputs.image}}\" helm/values.yaml
     - name: Update values.production.yaml
       uses: mikefarah/yq@v4.35.2
       with:
-        cmd: yq e ".backend.image = \"${{github.event.inputs.image}}\"" helm/values.production.yaml  > helm/values.production.yaml
+        cmd: yq -i e .backend.image = \"${{github.event.inputs.image}}\" helm/values.production.yaml
 
-    # Requires actions to be allowed to open a PR:
+    # Create a PR with the new values files. This requires actions to
+    # be allowed to open a PR:
     # https://github.com/marketplace/actions/create-pull-request#workflow-permissions
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v5
