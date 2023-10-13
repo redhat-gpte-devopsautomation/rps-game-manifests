@@ -1,0 +1,43 @@
+name: Update Backend Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        required: true
+        description: The new image, e.g quay.io/rhdevelopers/roshambo-backend:sha-8d4deb9
+
+jobs:
+  update-image-tag:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Print new image value
+      id: fooo
+      run: echo "New image is ${{github.event.inputs.image}}"
+
+    - name: Update values.yaml
+      uses: mikefarah/yq@v4.35.2
+      with:
+        cmd: yq e ".backend.image = \"${{github.event.inputs.image}}\"" helm/values.yaml  > helm/values.yaml
+
+    - name: Update values.production.yaml
+      uses: mikefarah/yq@v4.35.2
+      with:
+        cmd: yq e ".backend.image = \"${{github.event.inputs.image}}\"" helm/values.production.yaml  > helm/values.production.yaml
+
+    # Requires actions to be allowed to open a PR:
+    # https://github.com/marketplace/actions/create-pull-request#workflow-permissions
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v5
+      id: cpr
+      with:
+        commit-message: update backend image tag to ${{github.event.inputs.image}}
+
+    - name: Check outputs
+      if: ${{ steps.cpr.outputs.pull-request-number }}
+      run: |
+        echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+        echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
