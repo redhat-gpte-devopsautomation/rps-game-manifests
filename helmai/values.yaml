@@ -1,0 +1,4 @@
+ai:
+  host: modelmesh-serving
+  port: "8033"
+  model: rps

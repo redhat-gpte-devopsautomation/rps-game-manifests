@@ -1,0 +1,8 @@
+kind: ConfigMap 
+apiVersion: v1 
+metadata:
+  name: aiconfig
+data:
+  grpc_host: {{ .Values.ai.host }}
+  grpc_port: "{{ .Values.ai.port }}"
+  model_name: {{ .Values.ai.model }}

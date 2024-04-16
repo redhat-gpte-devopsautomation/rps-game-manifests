@@ -1,24 +1,26 @@
 backend:
-  # Change this to latest-camera to enable the camera feature flag.
-  # Alternatively, set ROSHAMBO_ENABLE_CAMERA=true in the environment
-  # for the backend deployment while still using the latest tag.
-  image: quay.io/rhdevelopers/roshambo-backend:sha-b521b7a
+  # Change tag to camera to enable image recognition
+  image: quay.io/rhdevelopers/roshambo-backend:buttons
+  bot: true
+  ainamespace: rps-ai-service
+
   # Do not change. Backend is not designed to scale horizontally.
-  repicas: 1
+  replicas: 1
   resources:
     requests:
-      memory: "256Mi"
-      cpu: "250m"
+      memory: "2Gi"
+      cpu: "2"
     limits:
       memory: "4Gi"
-      cpu: "2"
+      cpu: "4"
+
 frontend:
   image: quay.io/rhdevelopers/roshambo-frontend:latest
   replicas: 1
   resources:
     requests:
-      memory: "128Mi"
-      cpu: "100m"
-    limits:
       memory: "256Mi"
-      cpu: "250m"
+      cpu: "500m"
+    limits:
+      memory: "512Mi"
+      cpu: "1"

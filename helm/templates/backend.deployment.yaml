@@ -18,6 +18,11 @@ spec:
       containers:
         - name: roshambo-backend
           image: {{ .Values.backend.image }}
+          env:
+            - name: ROSHAMBO_ENABLE_BOT
+              value: "{{ .Values.backend.bot }}"
+            - name: AI_SERVER_URL
+              value: http://ai-service.{{.Values.backend.ainamespace}}.svc.cluster.local:8080
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
