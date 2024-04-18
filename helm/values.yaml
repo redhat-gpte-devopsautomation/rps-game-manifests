@@ -1,6 +1,6 @@
 backend:
   # Change tag to camera to enable image recognition
-  image: quay.io/rhdevelopers/roshambo-backend:camera
+  image: quay.io/rhdevelopers/roshambo-backend:buttons
   bot: true
   ainamespace: rps-ai-service
 
