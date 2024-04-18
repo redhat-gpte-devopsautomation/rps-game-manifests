@@ -59,7 +59,7 @@ spec:
           # uploading to minio
           filename = "rps_latest.onnx"
           with open(filename, "rb") as f:
-              s3.upload_fileobj(f, "models", f'accident/{filename}')
+              s3.upload_fileobj(f, "models", f'rps/{filename}')
 
           EOF
         envFrom:
