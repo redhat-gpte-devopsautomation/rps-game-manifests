@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: ai-service
+    app.kubernetes.io/name: python
   name: ai-service
 spec:
   replicas: 1
@@ -22,17 +23,3 @@ spec:
         envFrom:
         - configMapRef:
             name: aiconfig
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: ai-service
-  labels:
-    app: ai-service    
-spec:
-  ports:
-  - name: http
-    port: 8080
-  selector:
-    app: ai-service
-  type: LoadBalancer
