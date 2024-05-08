@@ -154,4 +154,102 @@ spec:
             requests:
               cpu: 10m
               memory: 10Mi
+---
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+  name: prepuller
+  namespace: rhods-notebooks
+spec:
+  selector:
+    matchLabels:
+      name: prepuller
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        name: prepuller
+    spec:
+      containers:
+        - name: prepuller-1
+          image: >-
+            quay.io/rhdevelopers/roshambo-ai:1.0.0
+          command: ["tail"]
+          args: ["-f", "/dev/null"]
+          resources:
+            limits:
+              memory: 20Mi
+            requests:
+              cpu: 10m
+              memory: 10Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+        - name: prepuller-2
+          image: >-
+            quay.io/rhdevelopers/roshambo-backend:buttons
+          command:
+            - sh
+            - '-c'
+            - '''true'''
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+        - name: prepuller-3
+          image: >-
+            quay.io/rhdevelopers/roshambo-backend:camera
+          command: ["tail"]
+          args: ["-f", "/dev/null"]
+          resources:
+            limits:
+              memory: 20Mi
+            requests:
+              cpu: 10m
+              memory: 10Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+        - name: prepuller-4
+          image: >-
+            quay.io/rhdevelopers/roshambo-frontend:latest
+          command: ["tail"]
+          args: ["-f", "/dev/null"]
+          resources:
+            limits:
+              memory: 20Mi
+            requests:
+              cpu: 10m
+              memory: 10Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+        - name: prepuller-5
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/pytorch:2023.2
+          command: ["tail"]
+          args: ["-f", "/dev/null"]
+          resources:
+            limits:
+              memory: 20Mi
+            requests:
+              cpu: 10m
+              memory: 10Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+        - name: prepuller-6
+          image: >-
+            quay.io/modh/openvino_model_server@sha256:5d04d405526ea4ce5b807d0cd199ccf7f71bab1228907c091e975efa770a4908
+          command:
+            - sh
+            - '-c'
+            - '''true'''
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+
 
