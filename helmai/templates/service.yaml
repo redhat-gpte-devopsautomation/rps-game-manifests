@@ -11,4 +11,4 @@ spec:
     port: 8080
   selector:
     app: ai-service
-  type: LoadBalancer
+  type: ClusterIP
