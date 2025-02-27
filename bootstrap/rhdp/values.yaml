@@ -1,0 +1,24 @@
+# Default values for bootstrap.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+user:
+  count: 2
+  prefix: user
+
+deployer:
+  domain: apps.cluster-guid.sandbox.opentlc.com
+  apiUrl: https://api.cluster-guid.sandbox.opentlc.com:6443
+
+argocd:
+  git:
+    url: https://github.com/redhat-developer-demos/rps-game-manifests
+    repo: rps-game-manifests
+    revision: main
+    path: bootstrap/argocd
+  values:
+    namespacePrefix: argocd-
+    # repos:
+    #   - type: git
+    #     name: app1
+    #     password: password
