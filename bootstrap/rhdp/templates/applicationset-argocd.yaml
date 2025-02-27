@@ -19,7 +19,7 @@ spec:
     spec:
       project: default
       source:
-        repoURL: {{ .Values.argocd.git.url }}/{{- "{{" }} user {{- " }}" }}/{{ .Values.argocd.git.repo }}
+        repoURL: {{ .Values.argocd.git.url }}
         targetRevision: {{ .Values.argocd.git.revision }}
         path: {{ .Values.argocd.git.path }}
         helm:
