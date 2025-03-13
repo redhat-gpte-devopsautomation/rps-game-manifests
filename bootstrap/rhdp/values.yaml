@@ -21,3 +21,9 @@ argocd:
     #   - type: git
     #     name: app1
     #     password: password
+
+workspace:
+  git:
+    url: https://github.com/redhat-developer-demos/rps-game-manifests.git
+    revision: main
+    path: bootstrap/workspace
