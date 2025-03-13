@@ -24,7 +24,7 @@ spec:
         path: {{ .Values.workspace.git.path }}
         helm:
           values: |
-            username: {{- "{{" }} user {{- " }}" }}
+            username: '{{- "{{" }} user {{- " }}" }}'
       destination:
         server: https://kubernetes.default.svc
       syncPolicy:

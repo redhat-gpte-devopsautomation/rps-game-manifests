@@ -4,7 +4,7 @@ kind: Namespace
 metadata:
   name: wksp-{{ .Values.username }}
   annotations:
-    openshift.io/description: "ArgoCD GitOps Namespace"
+    openshift.io/description: "Workspace Namespace"
     openshift.io/display-name: "Workspace"
 ---
 apiVersion: rbac.authorization.k8s.io/v1
