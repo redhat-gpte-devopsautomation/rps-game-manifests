@@ -14,8 +14,8 @@ resources:
 - workbench-vscode-is.yaml
 - odhdashboardconfig.yaml
 - accelerator-profile.yaml
+- model-registry.yaml
 # wave 2
 - images-puller.yaml
 - projects-sa.yaml
-- model-registry.yaml
   
