@@ -10,6 +10,7 @@ resources:
 - gp3-remove-default.yaml
 - ceph-rbd-set-default.yaml
 # wave 1
+- model-registry.yaml
 - workbench-imagestream.yaml
 - workbench-vscode-is.yaml
 - odhdashboardconfig.yaml
