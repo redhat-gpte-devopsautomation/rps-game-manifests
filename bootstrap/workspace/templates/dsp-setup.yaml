@@ -108,5 +108,5 @@ spec:
         imagePullPolicy: IfNotPresent
         name: create-ds-connections
       restartPolicy: Never
-      serviceAccount: demo-setup
-      serviceAccountName: demo-setup
+      serviceAccount: project-creator
+      serviceAccountName: project-creator

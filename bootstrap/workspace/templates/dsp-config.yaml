@@ -16,13 +16,13 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: demo-setup
+  name: demo-setup-{{ .Values.username }}
   namespace: wksp-{{ .Values.username }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: demo-setup-edit
+  name: demo-setup-edit-{{ .Values.username }}
   namespace: wksp-{{ .Values.username }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -30,7 +30,7 @@ roleRef:
   name: edit
 subjects:
 - kind: ServiceAccount
-  name: demo-setup
+  name: demo-setup-{{ .Values.username }}
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -38,11 +38,11 @@ metadata:
   name: demo-setup-route-reader-binding-wksp-{{ .Values.username }}
 subjects:
 - kind: ServiceAccount
-  name: demo-setup
+  name: demo-setup-{{ .Values.username }}
   namespace: wksp-{{ .Values.username }}
 roleRef:
   kind: ClusterRole
-  name: route-reader
+  name: route-reader-{{ .Values.username }}
   apiGroup: rbac.authorization.k8s.io
 ---
 kind: RoleBinding
@@ -59,7 +59,6 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: ds-pipeline-user-access-pipelines-definition
----
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -78,17 +77,17 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: project-creator
+  name: project-creator-{{ .Values.username }}
   namespace: wksp-{{ .Values.username }}
 ---
 # TODO: Change this to a non cluster-admin
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: project-creator-binding
+  name: project-creator-binding-{{ .Values.username }}
 subjects:
 - kind: ServiceAccount
-  name: project-creator
+  name: project-creator-{{ .Values.username }}
   namespace: wksp-{{ .Values.username }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -98,7 +97,7 @@ roleRef:
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: route-reader
+  name: route-reader-{{ .Values.username }}
 rules:
 - apiGroups: ["route.openshift.io"]
   resources: ["routes"]
