@@ -7,25 +7,23 @@ metadata:
   namespace: wksp-{{ .Values.username }}
 spec:
   apiServer:
-    applyTektonCustomResource: true
-    archiveLogs: false
-    autoUpdatePipelineDefaultVersion: true
-    collectMetrics: true
-    dbConfigConMaxLifetimeSec: 120
+    artifactSignedURLExpirySeconds: 60
+    caBundleFileMountPath: ''
+    caBundleFileName: ''
     deploy: true
     enableOauth: true
     enableSamplePipeline: false
-    injectDefaultScript: true
-    stripEOF: true
-    terminateStatus: Cancelled
-    trackArtifacts: true
   database:
+    disableHealthCheck: false
     mariaDB:
       deploy: true
       pipelineDBName: mlpipeline
       pvcSize: 10Gi
       username: mlpipeline
+  dspVersion: v2
   objectStorage:
+    disableHealthCheck: false
+    enableExternalRoute: false
     externalStorage:
       bucket: pipelines
       host: minio.ic-shared-minio.svc.cluster.local:9000
@@ -34,11 +32,11 @@ spec:
         accessKey: AWS_ACCESS_KEY_ID
         secretKey: AWS_SECRET_ACCESS_KEY
         secretName: aws-connection-pipeline-artifacts
-      scheme: http
-      secure: false
+      scheme: https
   persistenceAgent:
     deploy: true
     numWorkers: 2
+  podToPodTLS: true
   scheduledWorkflow:
     cronScheduleTimezone: UTC
     deploy: true
