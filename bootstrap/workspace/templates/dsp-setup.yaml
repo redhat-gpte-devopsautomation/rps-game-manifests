@@ -108,5 +108,5 @@ spec:
         imagePullPolicy: IfNotPresent
         name: create-ds-connections
       restartPolicy: Never
-      serviceAccount: project-creator
-      serviceAccountName: project-creator
+      serviceAccount: project-creator-{{ .Values.username }}
+      serviceAccountName: project-creator-{{ .Values.username }}
