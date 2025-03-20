@@ -1,0 +1,65 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ds-connections
+  namespace: wksp-{{ .Values.username }}
+spec:
+  selector: {}
+  template:
+    spec:
+      containers:
+      - args:
+        - -ec
+        - |-
+          echo "Minio user: minio"
+          echo "Minio pass: minio123"
+          echo "Internal service url: http://minio.ic-shared-minio.svc.cluster.local:9000/"
+          
+          cat << EOF | oc apply -f-
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: aws-connection-pipeline-artifacts
+            labels:
+              opendatahub.io/dashboard: "true"
+              opendatahub.io/managed: "true"
+            annotations:
+              opendatahub.io/connection-type: s3
+              openshift.io/display-name: Pipeline Artifacts
+          type: Opaque
+          stringData:
+            AWS_ACCESS_KEY_ID: minio
+            AWS_SECRET_ACCESS_KEY: minio123
+            AWS_DEFAULT_REGION: us-east-1
+            AWS_S3_ENDPOINT: http://minio.ic-shared-minio.svc:9000
+            AWS_S3_BUCKET: pipelines
+          EOF
+          
+          cat << EOF | oc apply -f-
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: aws-connection-my-storage
+            labels:
+              opendatahub.io/dashboard: "true"
+              opendatahub.io/managed: "true"
+            annotations:
+              opendatahub.io/connection-type: s3
+              openshift.io/display-name: My Storage
+          type: Opaque
+          stringData:
+            AWS_ACCESS_KEY_ID: minio
+            AWS_SECRET_ACCESS_KEY: minio123
+            AWS_DEFAULT_REGION: us-east-1
+            AWS_S3_ENDPOINT: http://minio.ic-shared-minio.svc:9000
+            AWS_S3_BUCKET: models
+          EOF
+
+        command:
+        - /bin/bash
+        image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:95b359257a7716b5f8d3a672081a84600218d8f58ca720f46229f7bb893af2ab
+        imagePullPolicy: IfNotPresent
+        name: create-ds-connections
+      restartPolicy: Never
+      serviceAccount: project-creator-{{ .Values.username }}
+      serviceAccountName: project-creator-{{ .Values.username }}
