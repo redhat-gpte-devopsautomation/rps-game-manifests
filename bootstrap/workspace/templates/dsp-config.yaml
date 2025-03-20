@@ -59,3 +59,51 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: ds-pipeline-user-access-pipelines-definition
+---
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: wksp-edit-{{ .Values.username }}
+  namespace: wksp-{{ .Values.username }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: edit
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: User
+  name: {{ .Values.username }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: project-creator
+  namespace: wksp-{{ .Values.username }}
+---
+# TODO: Change this to a non cluster-admin
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: project-creator-binding
+subjects:
+- kind: ServiceAccount
+  name: project-creator
+  namespace: wksp-{{ .Values.username }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: route-reader
+rules:
+- apiGroups: ["route.openshift.io"]
+  resources: ["routes"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "list", "watch"]
+---
