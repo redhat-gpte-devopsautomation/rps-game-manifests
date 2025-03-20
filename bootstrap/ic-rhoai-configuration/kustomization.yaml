@@ -16,6 +16,6 @@ resources:
 - accelerator-profile.yaml
 - model-registry.yaml
 # wave 2
-- images-puller.yaml
+#- images-puller.yaml
 - projects-sa.yaml
   
