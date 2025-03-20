@@ -80,7 +80,7 @@ metadata:
   name: project-creator-{{ .Values.username }}
   namespace: wksp-{{ .Values.username }}
 ---
-# TODO: Change this to a non cluster-admin
+# Assign limited permissions instead of cluster-admin
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -94,6 +94,7 @@ roleRef:
   kind: ClusterRole
   name: edit
 ---
+# Cluster-wide permissions to read secrets
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -105,27 +106,18 @@ rules:
 - apiGroups: [""]
   resources: ["secrets"]
   verbs: ["get", "list", "watch"]
+  resourceNames: ["aws-connection-pipeline-artifacts"]
 ---
+# Bind the route-reader role to the project-creator SA across all namespaces
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRoleBinding
 metadata:
-  name: project-creator-secret-access
-  namespace: wksp-{{ .Values.username }}
-rules:
-- apiGroups: [""]
-  resources: ["secrets"]
-  verbs: ["get", "list", "watch"]
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: project-creator-secret-binding
-  namespace: wksp-{{ .Values.username }}
+  name: project-creator-secret-binding-global
 subjects:
 - kind: ServiceAccount
   name: project-creator-{{ .Values.username }}
   namespace: wksp-{{ .Values.username }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: project-creator-secret-access
+  kind: ClusterRole
+  name: route-reader-{{ .Values.username }}
