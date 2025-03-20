@@ -1,0 +1,243 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: registry-db-parameters
+  namespace: rhoai-model-registries
+data:
+  MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+  MYSQL_DATABASE: metadb
+  MYSQL_PORT: '3306'
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: registry-db
+  namespace: rhoai-model-registries
+  annotations:
+    template.openshift.io/expose-database_name: '{.data[''database-name'']}'
+    template.openshift.io/expose-password: '{.data[''database-password'']}'
+    template.openshift.io/expose-username: '{.data[''database-user'']}'
+data:
+  database-name: bWV0YWRi
+  database-password: dGVzdA==
+  database-user: cm9vdA==
+type: Opaque
+---
+apiVersion: modelregistry.opendatahub.io/v1alpha1
+kind: ModelRegistry
+metadata:
+  annotations:
+    openshift.io/description: Model Registry
+    openshift.io/display-name: registry
+  name: registry
+  namespace: rhoai-model-registries
+  finalizers:
+    - modelregistry.opendatahub.io/finalizer
+spec:
+  grpc:
+    image: 'registry.redhat.io/rhoai/odh-mlmd-grpc-server-rhel8@sha256:927a88bade78e121d84e4d072f07a203fb00173af3615e00ce712d45329dde2d'
+    port: 9090
+    resources:
+      limits:
+        cpu: 100m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 256Mi
+  istio:
+    audiences:
+      - 'https://kubernetes.default.svc'
+    authConfigLabels:
+      security.opendatahub.io/authorization-group: default
+    authProvider: redhat-ods-applications-auth-provider
+    gateway:
+      grpc:
+        gatewayRoute: enabled
+        port: 443
+        tls:
+          credentialName: default-modelregistry-cert
+          mode: SIMPLE
+      istioIngress: ingressgateway
+      rest:
+        gatewayRoute: enabled
+        port: 443
+        tls:
+          credentialName: default-modelregistry-cert
+          mode: SIMPLE
+    tlsMode: ISTIO_MUTUAL
+  mysql:
+    database: metadb
+    host: registry-db.rhoai-model-registries.svc.cluster.local
+    passwordSecret:
+      key: database-password
+      name: registry-db
+    port: 3306
+    skipDBCreation: false
+    username: root
+  rest:
+    image: 'quay.io/opendatahub/model-registry:v0.2.10'
+    port: 8080
+    resources:
+      limits:
+        cpu: 100m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 256Mi
+    serviceRoute: disabled
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: registry-db
+  namespace: rhoai-model-registries
+  labels:
+    component: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: db
+  template:
+    metadata:
+      name: db
+      creationTimestamp: null
+      labels:
+        component: db
+      annotations:
+        sidecar.istio.io/inject: 'false'
+    spec:
+      volumes:
+        - name: metadata-mysql
+          persistentVolumeClaim:
+            claimName: metadata-mysql
+      containers:
+        - resources: {}
+          readinessProbe:
+            exec:
+              command:
+                - /bin/bash
+                - '-c'
+                - mysql -D $$MYSQL_DATABASE -u$$MYSQL_USER_NAME -p$$MYSQL_ROOT_PASSWORD -e 'SELECT 1'
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 2
+            successThreshold: 1
+            failureThreshold: 3
+          terminationMessagePath: /dev/termination-log
+          name: db-container
+          ports:
+            - name: dbapi
+              containerPort: 3306
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: metadata-mysql
+              mountPath: /var/lib/mysql
+          terminationMessagePolicy: File
+          envFrom:
+            - configMapRef:
+                name: registry-db-parameters
+            - secretRef:
+                name: registry-db-secrets
+          image: 'mysql:8.0.3'
+          args:
+            - '--datadir'
+            - /var/lib/mysql/datadir
+            - '--default-authentication-plugin=mysql_native_password'
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: Recreate
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: metadata-mysql
+  namespace: rhoai-model-registries
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: registry-db-secrets
+  namespace: rhoai-model-registries
+data:
+  MYSQL_ROOT_PASSWORD: dGVzdA==
+  MYSQL_USER_NAME: cm9vdA==
+type: Opaque
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: registry-db
+  namespace: rhoai-model-registries
+  labels:
+    component: db
+spec:
+  ports:
+    - name: dbapi
+      protocol: TCP
+      port: 3306
+      targetPort: 3306
+  type: ClusterIP
+  selector:
+    component: db
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  annotations:
+    openshift.io/description: Can access Model Registry registry
+    openshift.io/display-name: Registry User registry
+  name: rh1-registry-user-registry
+  labels:
+    app: rh1-registry
+    app.kubernetes.io/component: rh1-registry
+    app.kubernetes.io/created-by: rh1-registry-operator
+    app.kubernetes.io/instance: registry-user-rh1-registry
+    app.kubernetes.io/managed-by: rh1-registry-operator
+    app.kubernetes.io/name: rh1-registry
+    app.kubernetes.io/part-of: rh1-registry
+    component: rh1-registry
+rules:
+  - verbs:
+      - get
+    apiGroups:
+      - ''
+    resources:
+      - services
+    resourceNames:
+      - rh1-registry
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: dashboard-permissions-everybody
+  namespace: rhoai-model-registries
+  labels:
+    app: registry
+    app.kubernetes.io/component: registry
+    app.kubernetes.io/name: registry
+    app.kubernetes.io/part-of: registry
+    component: registry
+    opendatahub.io/dashboard: 'true'
+subjects:
+  - kind: Group
+    apiGroup: rbac.authorization.k8s.io
+    name: system:authenticated
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: rh1-registry-user-registry

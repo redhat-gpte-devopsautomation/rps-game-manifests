@@ -17,5 +17,5 @@ resources:
 # wave 2
 - images-puller.yaml
 - projects-sa.yaml
-
+- model-registry.yaml
   
