@@ -4,7 +4,7 @@ metadata:
   finalizers:
   - datasciencepipelinesapplications.opendatahub.io/finalizer
   name: pipelines-definition
-  namespace: {{ .Values.username }}
+  namespace: wksp-{{ .Values.username }}
 spec:
   apiServer:
     applyTektonCustomResource: true
