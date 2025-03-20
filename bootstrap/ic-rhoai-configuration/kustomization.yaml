@@ -9,6 +9,7 @@ resources:
 # wave 0
 - gp3-remove-default.yaml
 - ceph-rbd-set-default.yaml
+- default-dsc.yaml
 # wave 1
 - model-registry.yaml
 - workbench-imagestream.yaml

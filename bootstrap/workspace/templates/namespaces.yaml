@@ -1,8 +1,12 @@
 ---
-apiVersion: v1
-kind: Namespace
+apiVersion: project.openshift.io/v1
+kind: Project
 metadata:
-  name: wksp-{{ .Values.username }}
   annotations:
-    openshift.io/description: "Workspace Namespace"
-    openshift.io/display-name: "Workspace"
+    openshift.io/description: 'Your Data Science Project'
+    openshift.io/display-name: wksp-{{ .Values.username }}
+  labels:
+    kubernetes.io/metadata.name: wksp-{{ .Values.username }}
+    modelmesh-enabled: 'false'
+    opendatahub.io/dashboard: 'true'
+  name: wksp-{{ .Values.username }}
