@@ -3,25 +3,16 @@ kind: DataSciencePipelinesApplication
 metadata:
   finalizers:
   - datasciencepipelinesapplications.opendatahub.io/finalizer
-  name: dspa
+  name: pipelines-definition
   namespace: wksp-{{ .Values.username }}
 spec:
   apiServer:
+    artifactSignedURLExpirySeconds: 60
     caBundleFileMountPath: ''
-    stripEOF: true
-    dbConfigConMaxLifetimeSec: 120
-    applyTektonCustomResource: true
     caBundleFileName: ''
     deploy: true
-    artifactSignedURLExpirySeconds: 60
-    enableSamplePipeline: false
-    autoUpdatePipelineDefaultVersion: true
-    archiveLogs: false
-    terminateStatus: Cancelled
     enableOauth: true
-    trackArtifacts: true
-    collectMetrics: true
-    injectDefaultScript: true
+    enableSamplePipeline: false
   database:
     disableHealthCheck: false
     mariaDB:
@@ -35,16 +26,15 @@ spec:
     enableExternalRoute: false
     externalStorage:
       basePath: ''
-      bucket: $USER_NAME
-      host: $MINIO_ROUTE
+      bucket: pipelines
+      host: minio.ic-shared-minio.svc.cluster.local:9000
       port: ''
-      region: us
+      region: us-east-1
       s3CredentialsSecret:
         accessKey: AWS_ACCESS_KEY_ID
         secretKey: AWS_SECRET_ACCESS_KEY
         secretName: aws-connection-pipeline-artifacts
       scheme: https
-      secure: true
   persistenceAgent:
     deploy: true
     numWorkers: 2
