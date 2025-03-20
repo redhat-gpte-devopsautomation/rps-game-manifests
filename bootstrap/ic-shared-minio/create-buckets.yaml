@@ -56,6 +56,10 @@ spec:
           if models_bucket_name not in [bu["Name"] for bu in s3.list_buckets()["Buckets"]]:
               s3.create_bucket(Bucket=models_bucket_name)
 
+          # pipelines_bucket_name = "pipelines"
+          # if pipelines_bucket_name not in [bu["Name"] for bu in s3.list_buckets()["Buckets"]]:
+          #     s3.create_bucket(Bucket=pipelines_bucket_name)
+
           # uploading to minio
           filename = "rps_latest.onnx"
           with open(filename, "rb") as f:
