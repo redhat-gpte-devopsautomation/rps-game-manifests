@@ -35,6 +35,7 @@ spec:
         secretKey: AWS_SECRET_ACCESS_KEY
         secretName: aws-connection-pipeline-artifacts
       scheme: https
+      secure: true
   persistenceAgent:
     deploy: true
     numWorkers: 2
