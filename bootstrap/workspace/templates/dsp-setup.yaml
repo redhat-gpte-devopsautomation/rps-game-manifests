@@ -3,7 +3,7 @@ kind: DataSciencePipelinesApplication
 metadata:
   finalizers:
   - datasciencepipelinesapplications.opendatahub.io/finalizer
-  name: pipelines-definition
+  name: dspa
   namespace: wksp-{{ .Values.username }}
 spec:
   apiServer:
@@ -26,8 +26,8 @@ spec:
     enableExternalRoute: false
     externalStorage:
       basePath: ''
-      bucket: pipelines
-      host: minio.ic-shared-minio.svc.cluster.local:9000
+      bucket: pipeline-artifacts
+      host: 'minio.wksp-{{ .Values.username }}.svc.cluster.local:9000'
       port: ''
       region: us-east-1
       s3CredentialsSecret:
