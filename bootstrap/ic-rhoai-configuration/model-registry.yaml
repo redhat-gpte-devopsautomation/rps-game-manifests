@@ -28,7 +28,7 @@ apiVersion: modelregistry.opendatahub.io/v1alpha1
 kind: ModelRegistry
 metadata:
   annotations:
-    openshift.io/description: Model Registry
+    openshift.io/description: ''
     openshift.io/display-name: registry
   name: registry
   namespace: rhoai-model-registries
@@ -201,16 +201,16 @@ metadata:
   annotations:
     openshift.io/description: Can access Model Registry registry
     openshift.io/display-name: Registry User registry
-  name: rh1-registry-user-registry
+  name: registry-user-registry
   labels:
-    app: rh1-registry
-    app.kubernetes.io/component: rh1-registry
-    app.kubernetes.io/created-by: rh1-registry-operator
-    app.kubernetes.io/instance: registry-user-rh1-registry
-    app.kubernetes.io/managed-by: rh1-registry-operator
-    app.kubernetes.io/name: rh1-registry
-    app.kubernetes.io/part-of: rh1-registry
-    component: rh1-registry
+    app: registry
+    app.kubernetes.io/component: registry
+    app.kubernetes.io/created-by: registry-operator
+    app.kubernetes.io/instance: registry-user-registry
+    app.kubernetes.io/managed-by: registry-operator
+    app.kubernetes.io/name: registry
+    app.kubernetes.io/part-of: registry
+    component: registry
 rules:
   - verbs:
       - get
@@ -219,7 +219,7 @@ rules:
     resources:
       - services
     resourceNames:
-      - rh1-registry
+      - registry
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -240,4 +240,4 @@ subjects:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: rh1-registry-user-registry
+  name: registry-user-registry
