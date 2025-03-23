@@ -1,6 +1,5 @@
 ---
-apiVersion: project.openshift.io/v1
-kind: Project
+kind: Namespace
 metadata:
   annotations:
     openshift.io/description: 'Your Data Science Project'
