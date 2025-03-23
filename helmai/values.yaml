@@ -1,4 +1,5 @@
 ai:
-  host: modelmesh-serving
-  port: "8033"
-  model: rps
+  model_host: modelmesh-serving:8008
+  model_name: yolo-rps
+  model_url: ''
+  
