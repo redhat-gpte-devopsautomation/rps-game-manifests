@@ -3,11 +3,13 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: demo-setup
+  namespace: wksp-{{ .Values.username }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: demo-setup-edit
+  namespace: wksp-{{ .Values.username }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -19,6 +21,7 @@ subjects:
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: wksp-{{ .Values.username }}
   labels:
     app: minio
     app.kubernetes.io/component: minio
@@ -48,6 +51,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  namespace: wksp-{{ .Values.username }}
   labels:
     app: minio
     app.kubernetes.io/component: minio
@@ -66,6 +70,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: wksp-{{ .Values.username }}
   labels:
     app: minio
     app.kubernetes.io/component: minio
@@ -134,6 +139,7 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
+  namespace: wksp-{{ .Values.username }}
   name: create-ds-connections
 spec:
   selector: {}
@@ -211,6 +217,7 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
+  namespace: wksp-{{ .Values.username }}
   labels:
     app.kubernetes.io/component: minio
     app.kubernetes.io/instance: minio
@@ -288,6 +295,7 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
+  namespace: wksp-{{ .Values.username }}
   labels:
     app.kubernetes.io/component: minio
     app.kubernetes.io/instance: minio
@@ -341,6 +349,7 @@ spec:
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
+  namespace: wksp-{{ .Values.username }}
   labels:
     app: minio
     app.kubernetes.io/component: minio
@@ -364,6 +373,7 @@ spec:
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
+  namespace: wksp-{{ .Values.username }}
   labels:
     app: minio
     app.kubernetes.io/component: minio
