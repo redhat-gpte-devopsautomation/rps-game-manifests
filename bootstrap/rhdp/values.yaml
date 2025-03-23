@@ -12,7 +12,7 @@ deployer:
 
 argocd:
   git:
-    url: https://github.com/redhat-developer-demos/rps-game-manifests.git
+    url: https://github.com/redhat-gpte-devopsautomation/rps-game-manifests.git
     revision: main
     path: bootstrap/argocd
   values:
@@ -24,6 +24,6 @@ argocd:
 
 workspace:
   git:
-    url: https://github.com/redhat-developer-demos/rps-game-manifests.git
+    url: https://github.com/redhat-gpte-devopsautomation/rps-game-manifests.git
     revision: main
     path: bootstrap/workspace
