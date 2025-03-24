@@ -6,3 +6,5 @@ metadata:
   annotations:
     openshift.io/description: "ArgoCD GitOps Namespace"
     openshift.io/display-name: "ArgoCD GitOps Namespace"
+  labels:
+    opendatahub.io/dashboard: 'false'
