@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    openshift.io/description: 'Your Game Project'
+    openshift.io/display-name: game-{{ .Values.username }}
+  labels:
+    kubernetes.io/metadata.name: game-{{ .Values.username }}
+    opendatahub.io/dashboard: 'false'
+    argocd.argoproj.io/managed-by: argocd-{{ .Values.username }}
+  name: game-{{ .Values.username }}
