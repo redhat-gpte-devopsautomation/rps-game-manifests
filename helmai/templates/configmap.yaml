@@ -5,4 +5,3 @@ metadata:
 data:
   MODEL_HOST: {{ .Values.ai.model_host }}
   MODEL_NAME: {{ .Values.ai.model_name }}
-  MODEL_URL: {{ .Values.ai.model_url }}
