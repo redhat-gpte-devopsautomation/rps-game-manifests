@@ -1,5 +1,5 @@
 ai:
   model_host: modelmesh-serving:8008
   model_name: yolo-rps
-  model_url: ''
+image: quay.io/rhdevelopers/roshambo-ai:1.0.2
   
