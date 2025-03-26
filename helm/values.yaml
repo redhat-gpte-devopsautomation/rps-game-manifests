@@ -8,11 +8,11 @@ backend:
   replicas: 1
   resources:
     requests:
+      memory: "1Gi"
+      cpu: "500m"
+    limits:
       memory: "2Gi"
       cpu: "2"
-    limits:
-      memory: "4Gi"
-      cpu: "4"
 
 frontend:
   image: quay.io/rhdevelopers/roshambo-frontend:latest
