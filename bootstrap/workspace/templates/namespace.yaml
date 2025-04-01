@@ -8,4 +8,5 @@ metadata:
     kubernetes.io/metadata.name: wksp-{{ .Values.username }}
     modelmesh-enabled: 'false'
     opendatahub.io/dashboard: 'true'
+    argocd.argoproj.io/managed-by: argocd-{{ .Values.username }}
   name: wksp-{{ .Values.username }}
