@@ -7,7 +7,6 @@ metadata:
     sidecar.istio.io/inject: 'true'
     sidecar.istio.io/rewriteAppHTTPProbers: 'true'
   name: {{ .Values.model.path }}
-  namespace: {{ .Values.namespace }}
   finalizers:
     - inferenceservice.finalizers
   labels:

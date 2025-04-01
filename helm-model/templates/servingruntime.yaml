@@ -8,7 +8,6 @@ metadata:
     opendatahub.io/template-name: kserve-ovms
     openshift.io/display-name: {{ .Values.model.name }}
   name: {{ .Values.model.name }}
-  namespace: {{ .Values.namespace }}
   labels:
     opendatahub.io/dashboard: 'true'
 spec:

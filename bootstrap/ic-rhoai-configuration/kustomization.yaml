@@ -15,7 +15,6 @@ resources:
 - workbench-imagestream.yaml
 - workbench-vscode-is.yaml
 - odhdashboardconfig.yaml
-- accelerator-profile.yaml
 # wave 2
 #- images-puller.yaml
 - projects-sa.yaml
