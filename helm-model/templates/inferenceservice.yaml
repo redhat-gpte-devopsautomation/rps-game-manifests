@@ -6,7 +6,7 @@ metadata:
     serving.knative.openshift.io/enablePassthrough: 'true'
     sidecar.istio.io/inject: 'true'
     sidecar.istio.io/rewriteAppHTTPProbers: 'true'
-  name: {{ .Values.model.path }}
+  name: {{ .Values.model.name }}
   finalizers:
     - inferenceservice.finalizers
   labels:
